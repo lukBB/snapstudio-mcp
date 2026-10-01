@@ -1,0 +1,416 @@
+{
+  "manifest_version": "0.3",
+  "name": "snapstudio",
+  "display_name": "SnapStudio",
+  "version": "1.2.0",
+  "description": "Let Claude design on your Mac: App Store screenshots, social posts and carousels, templates, upscaling and background removal, all rendered locally by SnapStudio.",
+  "long_description": "SnapStudio is a native macOS design studio with a built-in MCP server. With this extension Claude can fill templates with your copy and brand kit, beautify screenshots, export every App Store and social size, render carousels and short MP4s, upscale (RealESRGAN) and cut out backgrounds on-device, and find and redact API keys or faces before you share a screenshot. Requires SnapStudio 1.0 or later, installed from getsnapstudio.com or the Mac App Store; this extension starts the server bundled inside the app.",
+  "author": {
+    "name": "SnapStudio",
+    "email": "support@getsnapstudio.com",
+    "url": "https://getsnapstudio.com"
+  },
+  "homepage": "https://getsnapstudio.com/mcp/",
+  "documentation": "https://getsnapstudio.com/mcp/",
+  "support": "https://getsnapstudio.com/support/",
+  "privacy_policies": [
+    "https://getsnapstudio.com/privacy/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukBB/snapstudio-mcp"
+  },
+  "icon": "icon.png",
+  "server": {
+    "type": "binary",
+    "entry_point": "server/snapstudio-mcp",
+    "mcp_config": {
+      "command": "${__dirname}/server/snapstudio-mcp",
+      "args": [
+        "--workspace",
+        "${user_config.workspace}"
+      ],
+      "env": {}
+    }
+  },
+  "user_config": {
+    "workspace": {
+      "type": "directory",
+      "title": "Workspace folder",
+      "description": "Where SnapStudio saves the documents and exports Claude makes. It can read images from anywhere but only writes here.",
+      "required": false,
+      "default": "${HOME}/Library/Application Support/SnapStudio/AgentWorkspace"
+    }
+  },
+  "tools": [
+    {
+      "name": "list_documents",
+      "description": "List .snapstudio documents in the workspace with canvas size, layer count, and modification date."
+    },
+    {
+      "name": "duplicate_document",
+      "description": "Copy an EXISTING document (layers AND image assets) to a new name — the safe way to branch a variant before editing."
+    },
+    {
+      "name": "duplicate_layer",
+      "description": "Duplicate a layer (groups duplicate their whole subtree) with fresh ids, inserted just above the original."
+    },
+    {
+      "name": "list_fonts",
+      "description": "List font families available for text layers (installed + app-bundled)."
+    },
+    {
+      "name": "create_document",
+      "description": "Create a new empty document."
+    },
+    {
+      "name": "list_templates",
+      "description": "List design templates (id, name, category, size) with their fillable slots (text/image, keyed by slot name)."
+    },
+    {
+      "name": "list_palettes",
+      "description": "List the shared color palettes (id, name, family, role colors) — built-ins plus saved brand palettes."
+    },
+    {
+      "name": "save_palette",
+      "description": "Save a brand palette (edit-and-save-new): start from based_on (any palette) and override any role colors, or specify all roles."
+    },
+    {
+      "name": "delete_palette",
+      "description": "Delete a saved user palette (built-ins can't be deleted)."
+    },
+    {
+      "name": "list_brand_kits",
+      "description": "List saved brand kits (colors, fonts, logo, URL)."
+    },
+    {
+      "name": "save_brand_kit",
+      "description": "Save a brand kit: colors (from an existing palette or inline), heading/body fonts, URL/handle, and a logo image."
+    },
+    {
+      "name": "apply_brand_kit",
+      "description": "Apply a brand kit to a document: recolor the background + text (heuristic role mapping), set brand fonts, and place the logo."
+    },
+    {
+      "name": "generate_social_asset",
+      "description": "ONE CALL from brief to branded asset: template + brand kit + slot content → filled, branded document; optionally export sizes in the same call (preset or variants)."
+    },
+    {
+      "name": "list_assets",
+      "description": "Search the reusable asset library (logos, icons, textures) by name or tag."
+    },
+    {
+      "name": "save_asset",
+      "description": "Save a reusable image (or an AUDIO music bed via audio_path) to the asset library with a name and tags."
+    },
+    {
+      "name": "add_asset_to_document",
+      "description": "Place a library asset (by id from list_assets) into a document as an image layer."
+    },
+    {
+      "name": "create_from_template",
+      "description": "Create a document from a template with its designed placeholder content."
+    },
+    {
+      "name": "fill_template",
+      "description": "Create a document from a template with slot content applied in one call: texts maps slot name to replacement copy (typography stays as designed; copy longer than the slot box auto-shrinks the font unl"
+    },
+    {
+      "name": "render_template_batch",
+      "description": "Render one PNG per fill from a single template — batch asset generation."
+    },
+    {
+      "name": "relayout_template",
+      "description": "RE-LAYOUT one template into other formats — the smart alternative to cropping."
+    },
+    {
+      "name": "article_to_formats",
+      "description": "ARTICLE → CAROUSEL in one call: reads a URL (or html/title+points you supply), plans cover → key points → CTA, re-lays the template out for every requested format, and renders numbered slides into <ou"
+    },
+    {
+      "name": "generate_marketing_set",
+      "description": "Beautify a screenshot (gradient background, rounded corners) and export it in curated social-media sizes (Instagram square/story/portrait, Facebook, X, YouTube, LinkedIn) as PNGs into output_dir."
+    },
+    {
+      "name": "get_document",
+      "description": "Get the document's canvas + full layer tree (ids, names, types, frames) — the agent's DOM."
+    },
+    {
+      "name": "add_image_layer",
+      "description": "Add an image layer from a file path (readable anywhere) or base64 data."
+    },
+    {
+      "name": "add_text_layer",
+      "description": "Add a text layer."
+    },
+    {
+      "name": "measure_text",
+      "description": "Measure whether text fits a frame BEFORE creating a layer: returns fits true/false, the rendered size, and (when it overflows) the largest font size that fits."
+    },
+    {
+      "name": "add_shape_layer",
+      "description": "Add a shape layer."
+    },
+    {
+      "name": "set_layer_transform",
+      "description": "Move/resize/rotate a layer (any omitted field keeps its value)."
+    },
+    {
+      "name": "reorder_layer",
+      "description": "Change a layer's stacking order among its siblings (layers render bottom→top)."
+    },
+    {
+      "name": "add_pattern_layer",
+      "description": "Add a procedural background pattern (grid, dots, diagonal stripes, waves) as an image layer — no external tooling needed."
+    },
+    {
+      "name": "add_mesh_background",
+      "description": "Add a macOS-wallpaper-style multi-color mesh background (colors anchored around corners, softly blended) as a bottom image layer."
+    },
+    {
+      "name": "list_components",
+      "description": "List reusable design components (CTA button, slide badge, URL footer, category header, separator, photo overlay, slide counter, stat card, logo lockup) with their text slots — drop them into a documen"
+    },
+    {
+      "name": "add_component",
+      "description": "Insert a reusable component into a document as one group layer, painted from a palette or brand kit so it lands on-brand."
+    },
+    {
+      "name": "lint_design",
+      "description": "Design QA: flags text overflow, layers mostly off-canvas, empty image slots, low text/background contrast, overlapping text layers (collisions), and text/logo outside the format's safe area (Reels/Sho"
+    },
+    {
+      "name": "score_design",
+      "description": "Design quality score 0–100 with sub-scores (readability, text density, contrast, safe area) — gate export on quality."
+    },
+    {
+      "name": "render_contact_sheet",
+      "description": "Render up to 20 documents and/or image files side by side in one labeled grid image — review a whole carousel (Instagram allows 20 slides) at a glance, or compare PNGs already on disk without leaving "
+    },
+    {
+      "name": "set_layer_props",
+      "description": "Edit a layer in place — the one call for everything about an existing layer."
+    },
+    {
+      "name": "remove_layer",
+      "description": "Remove a layer."
+    },
+    {
+      "name": "render_preview",
+      "description": "Render the composited canvas as a PNG image — LOOK at your work after editing."
+    },
+    {
+      "name": "export_image",
+      "description": "Export the composited document to a file in the workspace (png/jpeg/webp/heic/tiff/gif/bmp/pdf)."
+    },
+    {
+      "name": "open_in_app",
+      "description": "Open the document in the SnapStudio app for the human to see."
+    },
+    {
+      "name": "set_adjustments",
+      "description": "Set photo adjustments on an image layer (only provided fields change; 0 = neutral)."
+    },
+    {
+      "name": "list_filters",
+      "description": "List the built-in filter presets (id, name, category)."
+    },
+    {
+      "name": "apply_filter",
+      "description": "Apply a filter preset to an image layer (replaces its adjustments)."
+    },
+    {
+      "name": "crop_layer",
+      "description": "Crop an image layer to a rect in IMAGE PIXELS, TOP-LEFT origin, y down — the same convention detect_sensitive_data reports and redact_layer's `regions` expects, so a rectangle from either can be passe"
+    },
+    {
+      "name": "set_canvas_size",
+      "description": "Change the canvas size; layers keep their pixel positions relative to the chosen anchor."
+    },
+    {
+      "name": "upscale_layer",
+      "description": "AI-upscale an image layer's pixels with RealESRGAN (2x or 4x)."
+    },
+    {
+      "name": "remove_background",
+      "description": "Remove the background of an image layer (Vision subject mask)."
+    },
+    {
+      "name": "detect_sensitive_data",
+      "description": "Scan an image layer — or every image layer in the document, if layer_id is omitted — for e-mails, API keys, card numbers, IBANs, phone numbers, IP addresses, tokenised URLs, home paths and faces."
+    },
+    {
+      "name": "redact_layer",
+      "description": "Permanently paint over (black out, pixelate, or blur) regions of an image layer — the sensitive-data eraser for screenshots."
+    },
+    {
+      "name": "auto_enhance",
+      "description": "One-click intelligent enhance of an image layer (histogram analysis; replaces pixels)."
+    },
+    {
+      "name": "set_hsl",
+      "description": "Per-color-band HSL grading on an image layer."
+    },
+    {
+      "name": "set_tone_curve",
+      "description": "Set a tone curve on an image layer (2-5 control points, 0-1 space)."
+    },
+    {
+      "name": "list_stickers",
+      "description": "List built-in vector stickers."
+    },
+    {
+      "name": "add_sticker",
+      "description": "Add a vector sticker as a shape layer."
+    },
+    {
+      "name": "list_frames",
+      "description": "List photo frame styles."
+    },
+    {
+      "name": "apply_frame",
+      "description": "Bake a photo frame around an image layer's pixels."
+    },
+    {
+      "name": "list_mockups",
+      "description": "List device mockup frames (Mac, iPhone, iPad, browser, watch)."
+    },
+    {
+      "name": "apply_mockup",
+      "description": "Frame a TOP-LEVEL image layer inside a device mockup."
+    },
+    {
+      "name": "list_beautify_styles",
+      "description": "List screenshot beautifier styles."
+    },
+    {
+      "name": "beautify_layer",
+      "description": "Screenshot beautifier: gradient backdrop, padding, rounded corners and shadow around a TOP-LEVEL image layer."
+    },
+    {
+      "name": "list_collage_templates",
+      "description": "List collage layouts."
+    },
+    {
+      "name": "create_collage",
+      "description": "Create a collage document from image files (one per slot, in order)."
+    },
+    {
+      "name": "save_as_template",
+      "description": "Save the document's layer structure as a reusable user template (appears in the app's gallery too)."
+    },
+    {
+      "name": "delete_template",
+      "description": "Permanently delete ONE user template by its exact id (use list_templates or inspect_template to find it — a name is not accepted here because a name can match several templates, and a delete must neve"
+    },
+    {
+      "name": "preview_template",
+      "description": "Render a template's preview image (built-in or user; embedded logos/photos included, empty image slots shown as gray placeholders) — LOOK at a template before choosing it."
+    },
+    {
+      "name": "generate_aso_pack",
+      "description": "COMPLETE store listings in one call: renders the built-in aso_* families (hero, features, CTA) with your app screenshots and copy for every language x platform — iPhone, iPad, Google Play AND the Mac "
+    },
+    {
+      "name": "inspect_template",
+      "description": "Structured JSON for one template: canvas, slots (name/role/default), full layer tree with frames/fonts/kinds, folder/family, palette-swappability — the machine-readable alternative to list_templates p"
+    },
+    {
+      "name": "diagnostics",
+      "description": "Server healthcheck / restart status: an ok line, the git commit this binary was built from (and whether the working tree was dirty at build time), whether a NEWER build has since been deployed to bin/"
+    },
+    {
+      "name": "render_carousel",
+      "description": "One-call social carousel (Instagram max 20 slides; YouTube Shorts max 10; sizes per platform: 1080x1080, 1080x1920, 960x1200, 1080x1350)."
+    },
+    {
+      "name": "save_video_template",
+      "description": "Save a reusable VIDEO template (CapCut-style): scenes reference layer templates (with slots) plus per-layer animations, holds, transition and preset."
+    },
+    {
+      "name": "list_video_templates",
+      "description": "List saved video templates with their scenes, layer templates, and fillable slots."
+    },
+    {
+      "name": "render_video_template",
+      "description": "Render a saved video template into a finished MP4: per-scene slot fills (texts/image_paths like fill_template, plus clip_paths for VIDEO in image slots), optional palette/music/bpm override."
+    },
+    {
+      "name": "delete_video_template",
+      "description": "Delete a saved video template by id or name."
+    },
+    {
+      "name": "export_animated_post",
+      "description": "Animated social MP4 where each document's LAYERS animate in (slide/fade/pop, staggered bottom-to-top), hold fully visible, then cut/crossfade to the next document — motion-design posts straight from d"
+    },
+    {
+      "name": "export_slideshow",
+      "description": "Turn images or documents into a social MP4 slideshow (30 fps): per-slide duration, hard-cut or crossfade, optional Ken Burns pan-zoom and background music."
+    },
+    {
+      "name": "export_templates",
+      "description": "Export user templates to a portable directory (one sidecar bundle per template, image assets included) for backup or moving to another machine — re-importable with import_templates."
+    },
+    {
+      "name": "import_templates",
+      "description": "Import templates from a directory made by export_templates (or a copy of another machine's Templates dir)."
+    },
+    {
+      "name": "export_platform_pack",
+      "description": "Export the composited document at every size in a platform pack (App Store screenshots, Google Play incl."
+    },
+    {
+      "name": "set_layer_mask",
+      "description": "Mask a layer to a rectangle or ellipse region (layer-local coordinates, top-down)."
+    },
+    {
+      "name": "clear_layer_mask",
+      "description": "Remove a layer's mask."
+    },
+    {
+      "name": "add_drawing_layer",
+      "description": "Add a freehand drawing layer from polyline strokes (layer-local, top-down)."
+    },
+    {
+      "name": "clone_heal",
+      "description": "Clone or heal along a path on an image layer (image-pixel coordinates, top-down)."
+    },
+    {
+      "name": "apply_perspective",
+      "description": "Warp (apply) or de-keystone (correct) an image layer's pixels by four corners (image pixels, top-down)."
+    },
+    {
+      "name": "import_svg",
+      "description": "Import an SVG file as a vector layer group (optionally placed into a frame)."
+    },
+    {
+      "name": "export_svg",
+      "description": "Export the document as SVG (vector layers stay vector; trace_images vectorizes photos)."
+    },
+    {
+      "name": "batch_process",
+      "description": "Run one operation over every image in a folder (max 500)."
+    }
+  ],
+  "tools_generated": false,
+  "keywords": [
+    "design",
+    "image",
+    "screenshots",
+    "app store",
+    "aso",
+    "social media",
+    "carousel",
+    "templates",
+    "upscale",
+    "background removal",
+    "macos",
+    "marketing"
+  ],
+  "license": "MIT",
+  "compatibility": {
+    "platforms": [
+      "darwin"
+    ]
+  }
+}

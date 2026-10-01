@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.lukBB/snapstudio-mcp",
+  "title": "SnapStudio",
+  "description": "Design on your Mac: templates, App Store screenshots, social carousels, upscaling, background removal.",
+  "version": "1.2.0",
+  "websiteUrl": "https://getsnapstudio.com/mcp/",
+  "repository": {
+    "url": "https://github.com/lukBB/snapstudio-mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/lukBB/snapstudio-mcp/releases/download/v1.2.0/snapstudio.mcpb",
+      "version": "1.2.0",
+      "fileSha256": "caabdc2788fa33b71cfed61172c3aea9e71427ff17ca8c5c2b2067f4465b0d33",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

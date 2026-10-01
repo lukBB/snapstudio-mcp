@@ -1,0 +1,22 @@
+#!/bin/sh
+# SnapStudio MCP launcher.
+#
+# The MCP server ships inside SnapStudio.app (App Store or direct download) and
+# updates with it. This launcher only finds the installed app and hands stdio
+# over to its bundled server, so the bundle never goes stale.
+set -u
+
+for app in \
+  "/Applications/SnapStudio.app" \
+  "$HOME/Applications/SnapStudio.app" \
+  "$(mdfind "kMDItemCFBundleIdentifier == 'com.snapstudio.direct'" 2>/dev/null | head -n 1)" \
+  "$(mdfind "kMDItemCFBundleIdentifier == 'com.snapstudio.app'" 2>/dev/null | head -n 1)"
+do
+  bin="$app/Contents/MacOS/snapstudio-mcp"
+  if [ -n "$app" ] && [ -x "$bin" ]; then
+    exec "$bin" "$@"
+  fi
+done
+
+echo "SnapStudio is not installed. Get it at https://getsnapstudio.com (Mac App Store or direct download), then restart your MCP client." >&2
+exit 1
